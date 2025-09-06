@@ -1,0 +1,66 @@
+<!-- Main Content -->
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4" id="mainContent">
+  <div
+    class="d-flex flex-column flex-md-row align-items-md-center justify-content-between"
+  >
+    <h1 class="fw-bold mb-3 mb-md-0">All Inventory Items</h1>
+
+    <!-- Actions (Add + Search + Filter) -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+      <!-- Add Product Button -->
+      <a href="/products/new" class="btn btn-success">➕ Add Product</a>
+
+      <!-- Search Bar -->
+      <form action="/products/search" method="get" class="d-flex">
+        <input
+          type="text"
+          class="form-control me-2"
+          name="q"
+          placeholder="Search products..."
+        />
+        <button class="btn btn-outline-secondary">Search</button>
+      </form>
+
+      <!-- Filter Form -->
+      <form action="" method="get" class="d-flex">
+        <select
+          class="form-select me-2"
+          name="category"
+          id="category"
+          style="min-width: 150px"
+        >
+          <option value="">All Categories</option>
+          <% for(let cat of categories){ %>
+          <option value="<%= cat %>"><%= cat %></option>
+          <% } %>
+        </select>
+        <button class="btn btn-primary">Filter</button>
+      </form>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Inventory Grid -->
+  <div class="row">
+    <% for(let data of db) { %>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title"><%= data.name %></h5>
+          <p class="card-text text-muted mb-1">
+            Price: <strong>₱<%= data.price %></strong>
+          </p>
+          <p class="card-text mb-1">Category: <%= data.category %></p>
+          <p class="card-text mb-3">Stock: <%= data.stock %></p>
+          <a
+            href="/products/<%= data._id %>"
+            class="btn btn-sm btn-outline-primary mt-auto"
+            >Details</a
+          >
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</main>

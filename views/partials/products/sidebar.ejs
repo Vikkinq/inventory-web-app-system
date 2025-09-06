@@ -1,0 +1,89 @@
+<!-- Mobile Navbar / Burger -->
+<nav class="navbar navbar-dark bg-dark d-md-none">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand ms-2" href="/dashboard">Inventory System</a>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<nav
+  id="sidebarMenu"
+  class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse"
+>
+  <div class="position-sticky p-3">
+    <!-- Profile -->
+    <div class="d-flex align-items-center mb-4 text-white">
+      <div
+        class="profile-pic bg-white text-dark rounded-circle d-flex align-items-center justify-content-center"
+        style="width: 40px; height: 40px"
+      >
+        ?
+      </div>
+      <div class="ms-2">
+        <h6 class="mb-0">Username</h6>
+        <small>Role: Admin</small>
+      </div>
+    </div>
+
+    <!-- Core Pages -->
+    <h6 class="text-white-50 text-uppercase">Core Pages</h6>
+    <ul class="nav flex-column mb-3">
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboard">
+          <i class="fas fa-chart-line me-2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/products">
+          <i class="fas fa-box-open me-2"></i> Inventory / Products
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/sales">
+          <i class="fas fa-shopping-cart me-2"></i> Sales / POS
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/reports">
+          <i class="fas fa-file-alt me-2"></i> Reports
+        </a>
+      </li>
+    </ul>
+
+    <!-- User Management -->
+    <h6 class="text-white-50 text-uppercase">User / Account</h6>
+    <ul class="nav flex-column mb-3">
+      <li class="nav-item">
+        <a class="nav-link" href="/users">
+          <i class="fas fa-users me-2"></i> Users
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/profile">
+          <i class="fas fa-user-cog me-2"></i> Profile / Settings
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">
+          <i class="fas fa-sign-out-alt me-2"></i> Logout
+        </a>
+      </li>
+    </ul>
+
+    <!-- Dark Mode Toggle -->
+    <div class="form-check form-switch text-white mt-4">
+      <input class="form-check-input" type="checkbox" id="darkModeToggle" />
+      <label class="form-check-label" for="darkModeToggle">
+        🌙 Dark Mode
+      </label>
+    </div>
+  </div>
+</nav>

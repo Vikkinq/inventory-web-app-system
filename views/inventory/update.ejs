@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Inventory</title>
+  </head>
+  <body>
+    <main>
+      <h1>Edit Product!</h1>
+      <div>
+        <form
+          action="/products/<%= foundProduct._id %>?_method=PUT"
+          method="POST"
+        >
+          <label for="name">Product Name </label>
+          <input
+            type="text"
+            name="name"
+            placeholder="product name"
+            id="name"
+            value="<%= foundProduct.name %>"
+          />
+
+          <label for="price">Price </label>
+          <input
+            type="number"
+            name="price"
+            placeholder="product price"
+            id="price"
+            value="<%= foundProduct.price %>"
+          />
+
+          <label for="stock">Stocks</label>
+          <input
+            type="number"
+            name="stock"
+            placeholder="product stocks"
+            id="stock"
+            value="<%= foundProduct.stock %>"
+          />
+
+          <label for="category">Category</label>
+          <select
+            name="category"
+            id="category"
+            value="<%= foundProduct.category %>"
+          >
+            <% for(let cat of categories){ %>
+            <option value="<%= cat %>" <%= foundProduct.category === cat ? 'selected': '' %>><%= cat %></option>
+            <% } %>
+          </select>
+
+          <button>Save and Exit</button>
+        </form>
+        <a href="/products/<%= foundProduct._id %>">Cancel</a>
+      </div>
+    </main>
+  </body>
+</html>
