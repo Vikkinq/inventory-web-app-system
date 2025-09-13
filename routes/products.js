@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Product = require("../models/product");
 const ExpressError = require("../Utility/AppError");
+const { isLoggedIn } = require("../Utility/auth_validation");
 
 const categories = ["food", "beverages", "snacks", "sauce", "cigarettes"];
 
 // INDEX (show all products)
-router.get("/", async (req, res) => {
+router.get("/", isLoggedIn, async (req, res) => {
   const { category } = req.query;
   const db = category ? await Product.find({ category }) : await Product.find({});
   if (!db) {
@@ -16,12 +17,12 @@ router.get("/", async (req, res) => {
 });
 
 // NEW form
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("inventory/new", { categories });
 });
 
 // CREATE product
-router.post("/", async (req, res, next) => {
+router.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body);
     res.redirect("/products");
@@ -31,7 +32,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // SHOW product
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", isLoggedIn, async (req, res, next) => {
   try {
     const { id } = req.params;
     const foundProduct = await Product.findById(id);
@@ -45,7 +46,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // EDIT form
-router.get("/:id/edit", async (req, res, next) => {
+router.get("/:id/edit", isLoggedIn, async (req, res, next) => {
   try {
     const { id } = req.params;
     const foundProduct = await Product.findById(id);
@@ -59,7 +60,7 @@ router.get("/:id/edit", async (req, res, next) => {
 });
 
 // UPDATE product
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", isLoggedIn, async (req, res, next) => {
   try {
     const { id } = req.params;
     const foundProduct = await Product.findByIdAndUpdate(id, req.body, {
@@ -73,7 +74,7 @@ router.put("/:id", async (req, res, next) => {
 });
 
 // DELETE product
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", isLoggedIn, async (req, res, next) => {
   try {
     const { id } = req.params;
     await Product.findByIdAndDelete(id);

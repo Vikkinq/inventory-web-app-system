@@ -2,9 +2,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
-const productRoutes = require("./routes/products");
-const ExpressError = require("./Utility/AppError");
 const ejsMate = require("ejs-mate");
+const sessions = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+
+const productRoutes = require("./routes/products");
+const authentication_route = require("./routes/users");
+const User = require("./models/users");
+const ExpressError = require("./Utility/AppError");
 
 const app = express();
 
@@ -24,11 +31,40 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+// Sessions
+const sessionConfig = {
+  secret: "secretkey",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
+// Flash and Session Logic
+app.use(sessions(sessionConfig));
+app.use(flash());
+
+// Passport Logic (Passport.Session must be after SessionConfig)
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
 // mount product routes under /products
+app.use("/", authentication_route);
 app.use("/products", productRoutes);
 
-// redirect home → products
-app.get("/products", (req, res) => {
+app.get("/", (req, res) => {
   res.redirect("/products");
 });
 

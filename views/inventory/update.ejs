@@ -1,60 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Inventory</title>
-  </head>
-  <body>
-    <main>
-      <h1>Edit Product!</h1>
-      <div>
-        <form
-          action="/products/<%= foundProduct._id %>?_method=PUT"
+<% layout('layouts/boilerplate') %>
+
+<div class="row justify-content-center mt-4">
+  <div class="col-lg-6 col-md-8">
+    <div class="card shadow border-0 rounded-3">
+      <div class="card-body p-4">
+        <h3 class="card-title text-center mb-4">Edit Product</h3>
+
+        <form 
+          action="/products/<%= foundProduct._id %>?_method=PUT" 
           method="POST"
+          class="needs-validation" 
+          novalidate
         >
-          <label for="name">Product Name </label>
-          <input
-            type="text"
-            name="name"
-            placeholder="product name"
-            id="name"
-            value="<%= foundProduct.name %>"
-          />
+          <!-- Product Name -->
+          <div class="mb-3">
+            <label for="name" class="form-label">Product Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              value="<%= foundProduct.name %>"
+              required
+            />
+            <div class="invalid-feedback">Please enter a product name.</div>
+          </div>
 
-          <label for="price">Price </label>
-          <input
-            type="number"
-            name="price"
-            placeholder="product price"
-            id="price"
-            value="<%= foundProduct.price %>"
-          />
+          <!-- Price -->
+          <div class="mb-3">
+            <label for="price" class="form-label">Price ($)</label>
+            <input
+              type="number"
+              class="form-control"
+              id="price"
+              name="price"
+              value="<%= foundProduct.price %>"
+              min="0"
+              required
+            />
+            <div class="invalid-feedback">Please enter a valid price.</div>
+          </div>
 
-          <label for="stock">Stocks</label>
-          <input
-            type="number"
-            name="stock"
-            placeholder="product stocks"
-            id="stock"
-            value="<%= foundProduct.stock %>"
-          />
+          <!-- Stock -->
+          <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <input
+              type="number"
+              class="form-control"
+              id="stock"
+              name="stock"
+              value="<%= foundProduct.stock %>"
+              min="0"
+              required
+            />
+            <div class="invalid-feedback">Please enter the stock quantity.</div>
+          </div>
 
-          <label for="category">Category</label>
-          <select
-            name="category"
-            id="category"
-            value="<%= foundProduct.category %>"
-          >
-            <% for(let cat of categories){ %>
-            <option value="<%= cat %>" <%= foundProduct.category === cat ? 'selected': '' %>><%= cat %></option>
-            <% } %>
-          </select>
+          <!-- Category -->
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select 
+              class="form-select"
+              id="category" 
+              name="category" 
+              required
+            >
+              <% for(let cat of categories) { %>
+                <option 
+                  value="<%= cat %>" 
+                  <%= foundProduct.category === cat ? 'selected' : '' %>>
+                  <%= cat %>
+                </option>
+              <% } %>
+            </select>
+            <div class="invalid-feedback">Please select a category.</div>
+          </div>
 
-          <button>Save and Exit</button>
+          <!-- Buttons -->
+          <div class="d-flex justify-content-between">
+            <a href="/products/<%= foundProduct._id %>" class="btn btn-outline-secondary">
+              Cancel
+            </a>
+            <button type="submit" class="btn btn-primary">
+              Save and Exit
+            </button>
+          </div>
         </form>
-        <a href="/products/<%= foundProduct._id %>">Cancel</a>
       </div>
-    </main>
-  </body>
-</html>
+    </div>
+  </div>
+</div>

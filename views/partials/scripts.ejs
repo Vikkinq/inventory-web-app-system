@@ -7,3 +7,27 @@
     document.body.classList.toggle("dark-mode");
   });
 </script>
+
+<script>
+  // Bootstrap custom validation
+  (() => {
+    "use strict";
+
+    // Fetch all forms with needs-validation
+    const forms = document.querySelectorAll(".needs-validation");
+
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+</script>
