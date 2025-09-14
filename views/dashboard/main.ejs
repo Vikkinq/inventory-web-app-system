@@ -1,0 +1,104 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <%- include('../partials/products/sidebar') %>
+    <!-- Main content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <h1 class="h2 mt-4">Dashboard</h1>
+
+      <!-- KPI Cards -->
+      <div class="row my-4">
+        <div class="col-md-3">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Total Products</h5>
+              <p class="card-text display-6"><%= totalProducts %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Total Stock</h5>
+              <p class="card-text display-6"><%= totalStock %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Total Value</h5>
+              <p class="card-text display-6">₱<%= totalValue %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Total Sales</h5>
+              <p class="card-text display-6">₱0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row my-4">
+        <!-- Top Products Sold -->
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Top 5 Products Sold</h5>
+              <canvas id="topProductsChart" height="150"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Products in Stock -->
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Top 5 Products in Stock</h5>
+              <canvas id="topStockChart" height="150"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional Recently Added -->
+      <div class="row my-4">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Recent Stocks</h5>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Stock</th>
+                      <th scope="col">Category</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for(let recent of recentProducts){ %>
+                    <tr>
+                      <td><%= recent.name %></td>
+                      <td>₱<%= recent.price.toFixed(2) %></td>
+                      <td><%= recent.stock %></td>
+                      <td class="text-capitalize"><%= recent.category %></td>
+                    </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

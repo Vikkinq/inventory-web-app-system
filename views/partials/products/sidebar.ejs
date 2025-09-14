@@ -20,7 +20,7 @@
         ?
       </div>
       <div class="ms-2">
-        <h6 class="mb-0">Username</h6>
+        <h6 class="mb-0"><%= currentUser.username %></h6>
         <small>Role: Admin</small>
       </div>
     </div>
@@ -51,9 +51,15 @@
       <li class="nav-item">
         <a class="nav-link" href="/profile"> <i class="fas fa-user-cog me-2"></i> Profile / Settings </a>
       </li>
+      <% if(currentUser){ %>
       <li class="nav-item">
         <a class="nav-link" href="/logout"> <i class="fas fa-sign-out-alt me-2"></i> Logout </a>
       </li>
+      <% } else { %>
+      <li class="nav-item">
+        <a class="nav-link" href="/login"> <i class="fas fa-sign-out-alt me-2"></i> Login </a>
+      </li>
+      <% } %>
     </ul>
 
     <!-- Dark Mode Toggle -->

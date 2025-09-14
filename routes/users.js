@@ -3,56 +3,21 @@ const router = express.Router();
 const User = require("../models/users");
 const passport = require("passport");
 const { storeReturnTo } = require("../Utility/auth_validation");
+const user = require("../collections/user_collection");
 
-router.get("/register", (req, res, next) => {
-  res.render("auth/register");
-});
+router.get("/register", user.register_form);
 
-router.post("/register", async (req, res, next) => {
-  try {
-    const { username, email, password } = req.body;
-    const newUser = await User({ email, username });
-    const reg_user = await User.register(newUser, password);
-    req.login(reg_user, (err) => {
-      if (err) {
-        return next(err);
-      }
-      req.flash("success", "Welcome to Travel Spot!");
-      res.redirect("/products");
-    });
-  } catch (err) {
-    req.flash("error", err.message);
-    res.redirect("/register");
-  }
-});
+router.post("/register", user.register);
 
-router.get("/login", (req, res, next) => {
-  res.render("auth/login");
-});
+router.get("/login", user.login_form);
 
 router.post(
   "/login",
   storeReturnTo,
   passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }),
-  (req, res, next) => {
-    try {
-      req.flash("success", "Welcome back!");
-      const redirectUrl = res.locals.returnTo || "/products";
-      delete req.session.returnTo;
-      res.redirect(redirectUrl);
-    } catch (err) {
-      next(err);
-    }
-  }
+  user.login
 );
 
-router.get("/logout", (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/login");
-  });
-});
+router.get("/logout", user.logout);
 
 module.exports = router;

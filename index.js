@@ -10,6 +10,8 @@ const LocalStrategy = require("passport-local");
 
 const productRoutes = require("./routes/products");
 const authentication_route = require("./routes/users");
+const dashboardRoutes = require("./routes/dashboard");
+
 const User = require("./models/users");
 const ExpressError = require("./Utility/AppError");
 
@@ -63,6 +65,7 @@ app.use((req, res, next) => {
 // mount product routes under /products
 app.use("/", authentication_route);
 app.use("/products", productRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
   res.redirect("/products");

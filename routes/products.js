@@ -1,87 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/product");
-const ExpressError = require("../Utility/AppError");
 const { isLoggedIn } = require("../Utility/auth_validation");
-
-const categories = ["food", "beverages", "snacks", "sauce", "cigarettes"];
+const collection = require("../collections/product_collections");
 
 // INDEX (show all products)
-router.get("/", isLoggedIn, async (req, res) => {
-  const { category } = req.query;
-  const db = category ? await Product.find({ category }) : await Product.find({});
-  if (!db) {
-    throw new ExpressError("Cannot find data", 404);
-  }
-  res.render("inventory/index", { db, categories });
-});
+router.get("/", isLoggedIn, collection.index);
 
 // NEW form
-router.get("/new", isLoggedIn, (req, res) => {
-  res.render("inventory/new", { categories });
-});
+router.get("/new", isLoggedIn, collection.new_form);
 
 // CREATE product
-router.post("/", isLoggedIn, async (req, res, next) => {
-  try {
-    const newProduct = await Product.create(req.body);
-    res.redirect("/products");
-  } catch (err) {
-    next(err);
-  }
-});
+router.post("/", isLoggedIn, collection.create);
 
 // SHOW product
-router.get("/:id", isLoggedIn, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const foundProduct = await Product.findById(id);
-    if (!foundProduct) {
-      throw new ExpressError("Cannot find data", 404);
-    }
-    res.render("inventory/show", { foundProduct });
-  } catch (err) {
-    next(err);
-  }
-});
+router.get("/:id", isLoggedIn, collection.show);
 
 // EDIT form
-router.get("/:id/edit", isLoggedIn, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const foundProduct = await Product.findById(id);
-    if (!foundProduct) {
-      throw new ExpressError("Cannot find data", 404);
-    }
-    res.render("inventory/update", { foundProduct, categories });
-  } catch (err) {
-    next(err);
-  }
-});
+router.get("/:id/edit", isLoggedIn, collection.edit_form);
 
 // UPDATE product
-router.put("/:id", isLoggedIn, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const foundProduct = await Product.findByIdAndUpdate(id, req.body, {
-      runValidators: true,
-      new: true,
-    });
-    res.redirect(`/products/${foundProduct._id}`);
-  } catch (err) {
-    next(err);
-  }
-});
+router.put("/:id", isLoggedIn, collection.update);
 
 // DELETE product
-router.delete("/:id", isLoggedIn, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    await Product.findByIdAndDelete(id);
-    res.redirect("/products");
-  } catch (err) {
-    next(err);
-  }
-});
+router.delete("/:id", isLoggedIn, collection.delete);
 
 module.exports = router;
