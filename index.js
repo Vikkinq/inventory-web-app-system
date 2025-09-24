@@ -11,6 +11,7 @@ const LocalStrategy = require("passport-local");
 const productRoutes = require("./routes/products");
 const authentication_route = require("./routes/users");
 const dashboardRoutes = require("./routes/dashboard");
+const salesRoutes = require("./routes/sales");
 
 const User = require("./models/users");
 const ExpressError = require("./Utility/AppError");
@@ -30,6 +31,7 @@ app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
@@ -66,6 +68,7 @@ app.use((req, res, next) => {
 app.use("/", authentication_route);
 app.use("/products", productRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/sales", salesRoutes);
 
 app.get("/", (req, res) => {
   res.redirect("/products");

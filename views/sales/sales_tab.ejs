@@ -1,41 +1,63 @@
 <% layout('layouts/boilerplate') %>
+
 <div class="container-fluid">
   <div class="row">
-    <!-- Sidebar -->
+    <!-- Sidebar (Left) -->
     <%- include('../partials/products/sidebar') %>
+
     <!-- Main content -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <main class="col-md-7 ms-sm-auto col-lg-7 px-md-4">
       <h1 class="h2 mt-4">Sales</h1>
 
-      <div class="row my-4">
+      <div class="row my-4 g-3">
         <% for(let p of allProducts){ %>
-        <div class="col-md-3">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
+        <div class="col-md-4">
+          <div
+            class="card shadow-sm h-100 product-card"
+            data-id="<%= p._id %>"
+            data-name="<%= p.name %>"
+            data-price="<%= p.price %>"
+            data-market="<%= p.marketPrice %>"
+            data-stock="<%= p.stock %>"
+            style="cursor: pointer"
+          >
+            <div class="card-body text-center">
               <h5 class="card-title"><%= p.name %></h5>
-              <p class="card-text display-6"><%= p.price %></p>
-              <button
-                id=""
-                class="btn add-to-cart"
-                data-id="<%= p._id %>"
-                data-name="<%= p.name %>"
-                data-price="<%= p.price %>"
-                data-stock="<%= p.stock %>"
-              >
-                Add
-              </button>
+              <p class="card-text fs-2 fw-bold text-primary">₱<%= p.price %></p>
+              <small class="text-muted">Stock: <%= p.stock %></small>
             </div>
           </div>
         </div>
         <% } %>
       </div>
     </main>
-    <!-- Right Sidebar: Cart Display -->
-    <div id="cart">
-      <h3>Cart</h3>
-      <ul id="cart-items"></ul>
-      <p>Total: <span id="cart-total">0</span></p>
-      <p>Profit: <span id="cart-profit">0</span></p>
+
+    <!-- Cart Sidebar -->
+    <div class="col-md-3 bg-white border-start d-flex flex-column" style="min-height: 100vh">
+      <div class="p-3 border-bottom">
+        <h4 class="mb-0">Cart</h4>
+      </div>
+
+      <!-- Cart items scrollable list -->
+      <div id="cart-items" class="list-group list-group-flush flex-grow-1 overflow-auto">
+        <!-- Items will be rendered here by JS -->
+      </div>
+
+      <!-- Cart summary footer -->
+      <div class="p-3 border-top">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="fw-semibold">Total:</span>
+          <span id="cart-total" class="fs-5">₱0.00</span>
+        </div>
+        <div class="d-flex justify-content-between mb-3 text-muted small">
+          <span>Profit:</span>
+          <span id="cart-profit" class="fs-5">₱0.00</span>
+        </div>
+        <div class="d-grid gap-2">
+          <button id="checkout-btn" class="btn btn-primary btn-sm">Checkout</button>
+          <button id="clear-cart-btn" class="btn btn-outline-danger btn-sm">Clear Cart</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
