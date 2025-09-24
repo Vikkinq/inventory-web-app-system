@@ -18,7 +18,9 @@ module.exports.new_form = (req, res) => {
 
 module.exports.create = async (req, res, next) => {
   try {
-    const newProduct = await Product.create(req.body);
+    const newProduct = new Product(req.body);
+    // newProduct.user = req.user._id;
+    await newProduct.save();
     res.redirect("/products");
   } catch (err) {
     next(err);
