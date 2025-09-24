@@ -7,14 +7,12 @@ const Sale = require("../models/sales");
 const { storeReturnTo } = require("../Utility/auth_validation");
 const { isLoggedIn } = require("../Utility/auth_validation");
 
-// Routes
-router.post("/", isLoggedIn, (req, res, next) => {
-  res.send(req.body);
-});
+const controller = require("../collections/sales_collections");
 
-router.get("/", isLoggedIn, async (req, res, next) => {
-  const allProducts = await Product.find({});
-  res.render("sales/sales_tab", { allProducts });
-});
+// Show sales page
+router.get("/", isLoggedIn, controller.sales_tab);
+
+// POST /sales
+router.post("/", isLoggedIn, controller.sales);
 
 module.exports = router;

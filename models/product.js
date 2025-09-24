@@ -15,6 +15,12 @@ const productSchema = new Schema({
     required: true,
     min: 0,
   },
+  marketPrice: {
+    type: Number,
+    min: 0,
+    default: 0,
+    required: true,
+  },
   category: {
     type: String,
     lowercase: true,

@@ -38,17 +38,17 @@
           <div class="card text-center shadow-sm">
             <div class="card-body">
               <h5 class="card-title">Total Sales</h5>
-              <p class="card-text display-6">₱0</p>
+              <p class="card-text display-6">₱<%= totalSales %></p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Charts Row -->
-      <div class="row my-4">
+      <div class="row my-4 g-3">
         <!-- Top Products Sold -->
-        <div class="col-md-6">
-          <div class="card shadow-sm">
+        <div class="col-12 col-md-6">
+          <div class="card shadow-sm h-100">
             <div class="card-body">
               <h5 class="card-title">Top 5 Products Sold</h5>
               <canvas id="topProductsChart" height="150"></canvas>
@@ -57,8 +57,8 @@
         </div>
 
         <!-- Top Products in Stock -->
-        <div class="col-md-6">
-          <div class="card shadow-sm">
+        <div class="col-12 col-md-6">
+          <div class="card shadow-sm h-100">
             <div class="card-body">
               <h5 class="card-title">Top 5 Products in Stock</h5>
               <canvas id="topStockChart" height="150"></canvas>
@@ -102,3 +102,32 @@
     </main>
   </div>
 </div>
+
+<script>
+  const topProducts = <%- JSON.stringify(topProducts) %>;
+  const topStock = <%- JSON.stringify(topStock) %>;
+
+  // Top Products Sold Chart
+  new Chart(document.getElementById("topProductsChart"), {
+    type: "bar",
+    data: {
+      labels: topProducts.map(p => p.product.name),
+      datasets: [{
+        label: "Units Sold",
+        data: topProducts.map(p => p.totalSold),
+      }]
+    }
+  });
+
+  // Top Products in Stock Chart
+  new Chart(document.getElementById("topStockChart"), {
+    type: "bar",
+    data: {
+      labels: topStock.map(p => p.name),
+      datasets: [{
+        label: "Stock",
+        data: topStock.map(p => p.stock),
+      }]
+    }
+  });
+</script>

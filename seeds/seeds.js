@@ -1,51 +1,42 @@
-const mongoose = require("mongoose");
-const Product = require("../models/product");
-
-main().catch((err) => console.log("Error Connection", err));
-
-async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/inventoryApp");
-  console.log("DB CONNECTED!");
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-}
-
-const seedProducts = [
+module.exports = [
   {
     name: "Coke 1L",
+    category: "Beverages",
     price: 50,
-    category: "beverages",
+    marketPrice: 40,
     stock: 20,
+    user: "68c439ddc2ba09d791f590cb",
   },
   {
     name: "Mineral Water 500ml",
-    category: "beverages",
+    category: "Beverages",
     price: 15,
+    marketPrice: 8,
     stock: 40,
+    user: "68c439ddc2ba09d791f590cb",
   },
   {
     name: "Lucky Me Pancit Canton",
-    category: "snacks",
+    category: "Snacks",
     price: 15,
+    marketPrice: 10,
     stock: 60,
+    user: "68c439ddc2ba09d791f590cb",
   },
   {
     name: "Nissin Cup Noodles",
-    category: "snacks",
+    category: "Snacks",
     price: 35,
+    marketPrice: 25,
     stock: 25,
+    user: "68c439ddc2ba09d791f590cb",
   },
   {
     name: "Piattos (Cheese)",
-    category: "snacks",
+    category: "Snacks",
     price: 20,
+    marketPrice: 15,
     stock: 30,
+    user: "68c439ddc2ba09d791f590cb",
   },
 ];
-
-Product.insertMany(seedProducts)
-  .then((newProduct) => {
-    console.log("Successfully Stored: ", newProduct);
-  })
-  .catch((err) => {
-    console.log("Failed to Store: ", err);
-  });
