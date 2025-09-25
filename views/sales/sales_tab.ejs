@@ -53,6 +53,25 @@
           <span>Profit:</span>
           <span id="cart-profit" class="fs-5">₱0.00</span>
         </div>
+
+        <!-- Customer Payment Input -->
+        <div class="mb-2">
+          <label for="customer-payment" class="form-label small fw-semibold">Customer Payment:</label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            id="customer-payment"
+            class="form-control form-control-sm"
+            placeholder="Enter amount given"
+          />
+        </div>
+        <div class="d-flex justify-content-between mb-3">
+          <span class="fw-semibold">Change:</span>
+          <span id="change-amount" class="fs-3">₱0.00</span>
+        </div>
+
+        <!-- Buttons -->
         <div class="d-grid gap-2">
           <button id="checkout-btn" class="btn btn-primary btn-sm">Checkout</button>
           <button id="clear-cart-btn" class="btn btn-outline-danger btn-sm">Clear Cart</button>
