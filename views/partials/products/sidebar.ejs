@@ -10,64 +10,62 @@
 
 <!-- Sidebar -->
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
-  <div class="position-sticky vh-100 d-flex flex-column p-3">
-    <!-- Profile Section -->
+  <div class="position-sticky p-3">
+    <!-- Profile -->
     <div class="d-flex align-items-center mb-4 text-white">
       <div
-        class="profile-pic bg-white text-dark rounded-circle d-flex align-items-center justify-content-center me-2"
-        style="width: 50px; height: 50px; font-weight: bold; font-size: 1.2rem"
+        class="profile-pic bg-white text-dark rounded-circle d-flex align-items-center justify-content-center"
+        style="width: 40px; height: 40px"
       >
-        <%= currentUser.username.charAt(0).toUpperCase() %>
+        ?
       </div>
-      <div>
-        <h6 class="mb-0 fw-semibold"><%= currentUser.username %></h6>
-        <small class="text-muted">Role: Admin</small>
+      <div class="ms-2">
+        <h6 class="mb-0"><%= currentUser.username %></h6>
+        <small>Role: Admin</small>
       </div>
     </div>
 
     <!-- Core Pages -->
-    <h6 class="text-white-50 text-uppercase small mb-2">Core Pages</h6>
+    <h6 class="text-white-50 text-uppercase">Core Pages</h6>
     <ul class="nav flex-column mb-3">
       <li class="nav-item">
-        <a class="nav-link text-white" href="/dashboard"> <i class="fas fa-chart-line me-2"></i> Dashboard </a>
+        <a class="nav-link" href="/dashboard"> <i class="fas fa-chart-line me-2"></i> Dashboard </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white active bg-secondary rounded" href="/products">
-          <i class="fas fa-box-open me-2"></i> Inventory / Products
-        </a>
+        <a class="nav-link active" href="/products"> <i class="fas fa-box-open me-2"></i> Inventory / Products </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/sales"> <i class="fas fa-shopping-cart me-2"></i> Sales / POS </a>
+        <a class="nav-link" href="/sales"> <i class="fas fa-shopping-cart me-2"></i> Sales / POS </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/reports"> <i class="fas fa-file-alt me-2"></i> Reports </a>
+        <a class="nav-link" href="/reports"> <i class="fas fa-file-alt me-2"></i> Reports </a>
       </li>
     </ul>
 
-    <!-- User / Account -->
-    <h6 class="text-white-50 text-uppercase small mb-2">User / Account</h6>
+    <!-- User Management -->
+    <h6 class="text-white-50 text-uppercase">User / Account</h6>
     <ul class="nav flex-column mb-3">
       <li class="nav-item">
-        <a class="nav-link text-white" href="/users"> <i class="fas fa-users me-2"></i> Users </a>
+        <a class="nav-link" href="/users"> <i class="fas fa-users me-2"></i> Users </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/profile"> <i class="fas fa-user-cog me-2"></i> Profile / Settings </a>
+        <a class="nav-link" href="/profile"> <i class="fas fa-user-cog me-2"></i> Profile / Settings </a>
       </li>
       <% if(currentUser){ %>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/logout"> <i class="fas fa-sign-out-alt me-2"></i> Logout </a>
+        <a class="nav-link" href="/logout"> <i class="fas fa-sign-out-alt me-2"></i> Logout </a>
       </li>
       <% } else { %>
       <li class="nav-item">
-        <a class="nav-link text-white" href="/login"> <i class="fas fa-sign-in-alt me-2"></i> Login </a>
+        <a class="nav-link" href="/login"> <i class="fas fa-sign-out-alt me-2"></i> Login </a>
       </li>
       <% } %>
     </ul>
 
     <!-- Dark Mode Toggle -->
-    <div class="form-check form-switch text-white mt-auto">
+    <div class="form-check form-switch text-white mt-4">
       <input class="form-check-input" type="checkbox" id="darkModeToggle" />
-      <label class="form-check-label" for="darkModeToggle">🌙 Dark Mode</label>
+      <label class="form-check-label" for="darkModeToggle"> 🌙 Dark Mode </label>
     </div>
   </div>
 </nav>
