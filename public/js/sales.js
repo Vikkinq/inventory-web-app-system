@@ -6,7 +6,12 @@ const clearCartBtn = document.getElementById("clear-cart-btn"); // renamed for c
 const productCards = document.querySelectorAll(".product-card");
 const checkoutBtn = document.getElementById("checkout-btn");
 
+const customerPaymentInput = document.getElementById("customer-payment");
+const changeAmountEl = document.getElementById("change-amount");
+
 let cart = [];
+let total = 0; // make total global
+let profit = 0; // make profit global
 
 // Add to cart
 addBtns.forEach((btn) => {
@@ -41,8 +46,8 @@ addBtns.forEach((btn) => {
 function renderCart() {
   cartItemsList.innerHTML = "";
 
-  let total = 0;
-  let profit = 0;
+  total = 0; // reset global total
+  profit = 0; // reset global profit
 
   cart.forEach((item) => {
     total += item.subtotal;
@@ -56,25 +61,25 @@ function renderCart() {
         <small class="text-muted fs-6">₱${item.price} x ${item.quantity} = ₱${item.subtotal}</small>
       </div>
       <div class="d-flex align-items-center gap-2">
-  <div class="btn-group btn-group-sm" role="group">
-    <button class="btn btn-warning btn-minus">-</button>
-    <span class="btn btn-light disabled quantity-display">${item.quantity}</span>
-    <button class="btn btn-success btn-plus">+</button>
-  </div>
-  <button class="btn btn-sm btn-outline-danger btn-clear">Clear</button>
-</div>
-
+        <div class="btn-group btn-group-sm" role="group">
+          <button class="btn btn-warning btn-minus">-</button>
+          <span class="btn btn-light disabled quantity-display">${item.quantity}</span>
+          <button class="btn btn-success btn-plus">+</button>
+        </div>
+        <button class="btn btn-sm btn-outline-danger btn-clear">Clear</button>
+      </div>
     `;
 
-    // Actions for this item
-    li.querySelector(".btn-success").addEventListener("click", () => {
+    // Plus button
+    li.querySelector(".btn-plus").addEventListener("click", () => {
       item.quantity++;
       item.subtotal = item.quantity * item.price;
       item.profit = item.quantity * (item.price - item.market);
       renderCart();
     });
 
-    li.querySelector(".btn-warning").addEventListener("click", () => {
+    // Minus button
+    li.querySelector(".btn-minus").addEventListener("click", () => {
       if (item.quantity > 1) {
         item.quantity--;
         item.subtotal = item.quantity * item.price;
@@ -85,8 +90,8 @@ function renderCart() {
       renderCart();
     });
 
-    // ✅ Clear just this product
-    li.querySelector(".btn-outline-danger").addEventListener("click", () => {
+    // Clear button
+    li.querySelector(".btn-clear").addEventListener("click", () => {
       cart = cart.filter((c) => c.id !== item.id);
       renderCart();
     });
@@ -96,6 +101,9 @@ function renderCart() {
 
   cartTotalEl.textContent = total.toFixed(2);
   cartProfitEl.textContent = profit.toFixed(2);
+
+  // Update change whenever cart changes
+  updateChange();
 }
 
 // Checkout Button Logic
@@ -132,13 +140,18 @@ checkoutBtn.addEventListener("click", async () => {
     return;
   }
 
-  // Build request body
+  const payment = parseFloat(customerPaymentInput.value) || 0;
+  if (payment < total) {
+    alert("Customer payment is not enough!");
+    return;
+  }
+
   const payload = {
     products: cart.map((item) => ({
-      id: item.id, // product ObjectId (backend maps this to `product`)
-      price: item.price, // selling price
-      marketPrice: item.market, // cost price
-      quantity: item.quantity, // how many sold
+      id: item.id,
+      price: item.price,
+      marketPrice: item.market,
+      quantity: item.quantity,
     })),
   };
 
@@ -148,14 +161,13 @@ checkoutBtn.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
     const data = await res.json();
 
     if (res.ok) {
-      alert("Sale recorded successfully!");
-      cart = []; // clear local cart
+      alert(`Sale recorded successfully! Change: ₱${(payment - total).toFixed(2)}`);
+      cart = [];
+      customerPaymentInput.value = "";
       renderCart();
-      console.log("Sale saved:", data.sale);
     } else {
       alert("Error: " + data.message);
     }
@@ -170,3 +182,15 @@ clearCartBtn.addEventListener("click", () => {
   cart = [];
   renderCart();
 });
+
+function updateChange() {
+  const payment = parseFloat(customerPaymentInput.value) || 0;
+  const change = payment - total; // now total is global
+  changeAmountEl.textContent = "₱" + (change >= 0 ? change.toFixed(2) : "0.00");
+}
+
+// Listen for input changes
+customerPaymentInput.addEventListener("input", updateChange);
+
+// Also call on cart render to refresh
+updateChange();
