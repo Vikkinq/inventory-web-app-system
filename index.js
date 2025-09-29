@@ -12,6 +12,7 @@ const productRoutes = require("./routes/products");
 const authentication_route = require("./routes/users");
 const dashboardRoutes = require("./routes/dashboard");
 const salesRoutes = require("./routes/sales");
+const utangRoutes = require("./routes/utang");
 
 const User = require("./models/users");
 const ExpressError = require("./Utility/AppError");
@@ -69,6 +70,7 @@ app.use("/", authentication_route);
 app.use("/products", productRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/sales", salesRoutes);
+app.use("/utang", utangRoutes);
 
 app.get("/", (req, res) => {
   res.redirect("/products");
