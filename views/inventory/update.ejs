@@ -41,6 +41,22 @@
             <div class="invalid-feedback">Please enter a valid price.</div>
           </div>
 
+          <!-- Market Price -->
+                <div class="mb-3">
+                  <label for="marketPrice" class="form-label">Market Price</label>
+                  <input
+                  value="<%= foundProduct.marketPrice %>"
+                    type="number"
+                    name="marketPrice"
+                    id="marketPrice"
+                    class="form-control"
+                    placeholder="Enter product Market Price"
+                    required
+                  />
+                  <div class="invalid-feedback">Please enter a valid price.</div>
+                </div>
+
+
           <!-- Stock -->
           <div class="mb-3">
             <label for="stock" class="form-label">Stock</label>
@@ -78,7 +94,7 @@
 
           <!-- Buttons -->
           <div class="d-flex justify-content-between">
-            <a href="/products/<%= foundProduct._id %>" class="btn btn-outline-secondary">
+            <a href="/products" class="btn btn-outline-secondary">
               Cancel
             </a>
             <button type="submit" class="btn btn-primary">

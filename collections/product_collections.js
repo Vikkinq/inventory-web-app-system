@@ -3,13 +3,36 @@ const ExpressError = require("../Utility/AppError");
 
 const categories = ["food", "beverages", "snacks", "sauce", "cigarettes"];
 
-module.exports.index = async (req, res) => {
-  const { category } = req.query;
-  const db = category ? await Product.find({ category }) : await Product.find({});
-  if (!db) {
-    throw new ExpressError("Cannot find data", 404);
+module.exports.index = async (req, res, next) => {
+  try {
+    const { category, q } = req.query;
+    let filter = {};
+
+    // ✅ Filter by category
+    if (category && categories.includes(category)) {
+      filter.category = category;
+    }
+
+    // ✅ Optional search by product name
+    if (q && q.trim() !== "") {
+      filter.name = new RegExp(q, "i"); // case-insensitive
+    }
+
+    const db = await Product.find(filter);
+
+    if (!db) {
+      throw new ExpressError("Cannot find data", 404);
+    }
+
+    res.render("inventory/index", {
+      db,
+      categories,
+      category, // for highlighting active category button
+      q, // so search box can keep its value
+    });
+  } catch (err) {
+    next(err);
   }
-  res.render("inventory/index", { db, categories });
 };
 
 module.exports.new_form = (req, res) => {

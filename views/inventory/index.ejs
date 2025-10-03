@@ -7,44 +7,55 @@
 
     <!-- Main Section -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4" id="mainContent">
-      <!-- Header + Actions -->
-      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3">
-        <h1 class="fw-bold mb-3 mb-md-0">Inventory</h1>
+      <!-- Page Header -->
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+        <h1 class="fw-bold mb-3 mb-md-0">📦 Inventory</h1>
 
         <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
-          <a href="/products/new" class="btn btn-success w-100 w-md-auto">
-            <i class="bi bi-plus-circle"></i> Add Product
-          </a>
+          <!-- Add Product -->
+          <a href="/products/new" class="btn btn-success"> <i class="bi bi-plus-circle"></i> Add Product </a>
 
           <!-- Search -->
-          <form action="/products/search" method="get" class="d-flex w-100 w-md-auto">
-            <input type="text" class="form-control me-2" name="q" placeholder="Search..." />
+          <form action="/products" method="get" class="d-flex">
+            <% if (category) { %>
+            <input type="hidden" name="category" value="<%= category %>" />
+            <% } %>
+            <input
+              type="text"
+              class="form-control me-2"
+              name="q"
+              placeholder="Search products..."
+              value="<%= q || '' %>"
+            />
             <button class="btn btn-outline-secondary">
               <i class="bi bi-search"></i>
-            </button>
-          </form>
-
-          <!-- Category Filter -->
-          <form action="" method="get" class="d-flex w-100 w-md-auto">
-            <select class="form-select me-2" name="category" id="category">
-              <option value="">All Categories</option>
-              <% for(let cat of categories){ %>
-              <option value="<%= cat %>"><%= cat %></option>
-              <% } %>
-            </select>
-            <button class="btn btn-primary">
-              <i class="bi bi-filter"></i>
             </button>
           </form>
         </div>
       </div>
 
-      <hr />
+      <!-- Category Filter -->
+      <div class="mb-4">
+        <div class="d-flex flex-wrap gap-2">
+          <a href="/products" class="btn btn-sm <%= !category ? 'btn-primary' : 'btn-outline-primary' %>"> All </a>
+          <% categories.forEach(cat => { %>
+          <a
+            href="/products?category=<%= cat %>"
+            class="btn btn-sm <%= category === cat ? 'btn-primary' : 'btn-outline-primary' %>"
+          >
+            <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
+          </a>
+          <% }) %>
+        </div>
+      </div>
 
-      <!-- Inventory Table (desktop) -->
+      <!-- Divider -->
+      <hr class="my-3" />
+
+      <!-- Inventory Table (Desktop) -->
       <div class="d-none d-md-block">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle shadow-sm">
+        <div class="table-responsive shadow-sm rounded">
+          <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
               <tr>
                 <th>Name</th>
@@ -56,16 +67,18 @@
               </tr>
             </thead>
             <tbody>
-              <% if(db.length === 0){ %>
+              <% if (db.length === 0) { %>
               <tr>
-                <td colspan="5" class="text-center text-muted py-4">No products found</td>
+                <td colspan="6" class="text-center text-muted py-4">No products found</td>
               </tr>
-              <% } else { %> <% for(let data of db) { %>
+              <% } else { %> <% db.forEach(data => { %>
               <tr>
-                <td class="fs-5 fw-semibold text-dark"><%= data.name %></td>
-                <td class="text-center"><span class="badge bg-secondary"><%= data.category %></span></td>
+                <td class="fw-semibold"><%= data.name %></td>
+                <td class="text-center">
+                  <span class="badge bg-secondary"><%= data.category %></span>
+                </td>
                 <td class="text-end">₱<%= data.price %></td>
-                <td class="text-center">₱ <%= data.marketPrice %></td>
+                <td class="text-center">₱<%= data.marketPrice %></td>
                 <td class="text-center"><%= data.stock %></td>
                 <td class="text-center">
                   <a href="/products/<%= data._id %>" class="btn btn-sm btn-primary me-1">
@@ -85,23 +98,23 @@
                   </form>
                 </td>
               </tr>
-              <% } %> <% } %>
+              <% }) %> <% } %>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Inventory Cards (mobile) -->
+      <!-- Inventory Cards (Mobile) -->
       <div class="d-md-none">
-        <% if(db.length === 0){ %>
+        <% if (db.length === 0) { %>
         <p class="text-center text-muted">No products found</p>
         <% } else { %>
         <div class="row g-3">
-          <% for(let data of db) { %>
+          <% db.forEach(data => { %>
           <div class="col-12">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-0">
               <div class="card-body">
-                <h5 class="card-title mb-1"><%= data.name %></h5>
+                <h5 class="card-title fw-semibold mb-1"><%= data.name %></h5>
                 <p class="mb-1">
                   <span class="badge bg-secondary"><%= data.category %></span>
                 </p>
@@ -127,7 +140,7 @@
               </div>
             </div>
           </div>
-          <% } %>
+          <% }) %>
         </div>
         <% } %>
       </div>

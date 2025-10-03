@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -16,33 +20,46 @@ const utangRoutes = require("./routes/utang");
 
 const User = require("./models/users");
 const ExpressError = require("./Utility/AppError");
+const MongoSanitize = require("./Utility/MongoSanitize");
+const MongoStore = require("connect-mongo");
 
 const app = express();
 
 // All Static Files like .css and .js will be here
 app.use(express.static(path.join(__dirname, "public")));
 
+const mongo_url = process.env.MONGO_ATLAS || "mongodb://127.0.0.1:27017/inventoryApp";
+
 main().catch((err) => console.log("Error Connection", err));
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/inventoryApp");
+  await mongoose.connect(mongo_url);
   console.log("DB CONNECTED!");
 }
 
+// Logic for Server Routes
 app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+// HTTP FORMATS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-// Sessions
+// Sessions and Cookies
+const secret = process.env.SECRET || "secretkey";
+
 const sessionConfig = {
-  secret: "secretkey",
+  secret,
   resave: false,
   saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: mongo_url,
+    ttl: 14 * 24 * 60 * 60, // 14 days
+  }),
   cookie: {
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true, // good security practice
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
