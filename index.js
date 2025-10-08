@@ -21,6 +21,7 @@ const utangRoutes = require("./routes/utang");
 const User = require("./models/users");
 const ExpressError = require("./Utility/AppError");
 const MongoSanitize = require("./Utility/MongoSanitize");
+const { security } = require("./Utility/security_helmet");
 const MongoStore = require("connect-mongo");
 
 const app = express();
@@ -28,7 +29,8 @@ const app = express();
 // All Static Files like .css and .js will be here
 app.use(express.static(path.join(__dirname, "public")));
 
-const mongo_url = process.env.MONGO_ATLAS || "mongodb://127.0.0.1:27017/inventoryApp";
+const mongo_env = process.env.MONGO_ATLAS;
+const mongo_url = "mongodb://127.0.0.1:27017/inventoryApp";
 
 main().catch((err) => console.log("Error Connection", err));
 async function main() {
@@ -40,6 +42,13 @@ async function main() {
 app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+app.use(security);
+app.use(
+  MongoSanitize({
+    replaceWith: "_",
+  })
+);
 
 // HTTP FORMATS
 app.use(express.json());

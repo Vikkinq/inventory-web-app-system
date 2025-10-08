@@ -1,14 +1,39 @@
-<% if(success && success.length){ %>
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <strong><%= success %></strong>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<!-- Flash Message Modal -->
+<div class="modal fade" id="flashModal" tabindex="-1" aria-labelledby="flashModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div id="flashModalHeader" class="modal-header">
+        <h5 class="modal-title" id="flashModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="flashModalBody"></div>
+    </div>
+  </div>
 </div>
-<% } %>
 
-<!-- Error -->
-<% if(error && error.length){ %>
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong><%= error %></strong>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<% } %>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const success = <%- JSON.stringify(success || []) %>;
+    const error = <%- JSON.stringify(error || []) %>;
+
+    const modalEl = document.getElementById("flashModal");
+    const modalTitle = document.getElementById("flashModalLabel");
+    const modalBody = document.getElementById("flashModalBody");
+    const modalHeader = document.getElementById("flashModalHeader");
+
+    if (success.length > 0 || error.length > 0) {
+      const message = success.length > 0 ? success[0] : error[0];
+      const isSuccess = success.length > 0;
+
+      modalTitle.textContent = isSuccess ? "Success" : "Error";
+      modalBody.textContent = message;
+      modalHeader.classList.add(isSuccess ? "bg-success" : "bg-danger", "text-white");
+
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+
+      // Auto close after 3 seconds
+      setTimeout(() => modal.hide(), 3000);
+    }
+  });
+</script>

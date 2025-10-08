@@ -8,7 +8,14 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  role: {
+    type: String,
+    enum: ["admin", "guest"],
+    default: "guest",
+  },
 });
 
+// Adds username, hash + salt fields automatically
 userSchema.plugin(passportLocalMongoose);
+
 module.exports = mongoose.model("User", userSchema);

@@ -13,7 +13,9 @@
 
         <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
           <!-- Add Product -->
+          <% if (currentUser && currentUser.role === "admin") { %>
           <a href="/products/new" class="btn btn-success"> <i class="bi bi-plus-circle"></i> Add Product </a>
+          <% } %>
 
           <!-- Search -->
           <form action="/products" method="get" class="d-flex">
@@ -84,9 +86,12 @@
                   <a href="/products/<%= data._id %>" class="btn btn-sm btn-primary me-1">
                     <i class="bi bi-eye"></i>
                   </a>
+
+                  <% if (currentUser && currentUser.role === "admin") { %>
                   <a href="/products/<%= data._id %>/edit" class="btn btn-sm btn-success me-1">
                     <i class="bi bi-pencil"></i>
                   </a>
+
                   <form action="/products/<%= data._id %>?_method=DELETE" method="POST" class="d-inline">
                     <button
                       type="submit"
@@ -96,6 +101,7 @@
                       <i class="bi bi-trash"></i>
                     </button>
                   </form>
+                  <% } %>
                 </td>
               </tr>
               <% }) %> <% } %>
