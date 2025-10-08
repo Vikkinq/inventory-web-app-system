@@ -1,3 +1,14 @@
+const rateLimit = require("express-rate-limit");
+
+module.exports.loginLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 10, // max 5 attempts per window
+  handler: (req, res) => {
+    req.flash("error", "Too many login attempts. Please try again after 10 minutes.");
+    return res.redirect("/login");
+  },
+});
+
 module.exports.storeReturnTo = (req, res, next) => {
   if (req.session.returnTo) {
     res.locals.returnTo = req.session.returnTo;
