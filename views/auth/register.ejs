@@ -1,39 +1,59 @@
-<% layout('layouts/boilerplate') %> <%- include('../partials/flash') %>
-<div class="row justify-content-center mt-4">
-  <div class="col-lg-5 col-md-7">
-    <div class="card shadow border-0 rounded-3">
+<% layout('layouts/boilerplate') %>
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div style="width: 100%; max-width: 420px">
+    <!-- Flash Messages -->
+    <%- include('../partials/flash') %>
+
+    <!-- Register Card -->
+    <div class="card shadow-sm border-0 rounded-3">
       <div class="card-body p-4">
-        <h3 class="card-title text-center mb-4">Register</h3>
+        <h3 class="card-title text-center mb-4 fw-semibold">Register</h3>
 
         <!-- Register Form -->
         <form action="/register" method="POST" class="needs-validation" novalidate>
           <!-- Username -->
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required minlength="2" />
+            <label for="username" class="form-label fw-medium">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              required
+              minlength="2"
+              placeholder="Enter your username"
+            />
             <div class="invalid-feedback">Please provide a valid username.</div>
           </div>
 
           <!-- Email -->
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required />
+            <label for="email" class="form-label fw-medium">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email" />
             <div class="invalid-feedback">Please enter a valid email.</div>
           </div>
 
           <!-- Password -->
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required minlength="6" />
+            <label for="password" class="form-label fw-medium">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              required
+              minlength="6"
+              placeholder="Enter your password"
+            />
             <div class="invalid-feedback">Password must be at least 6 characters.</div>
           </div>
 
-          <button type="submit" class="btn btn-success w-100">Register</button>
+          <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">Create Account</button>
         </form>
 
         <p class="text-center mt-3 mb-0">
           Already have an account?
-          <a href="/login" class="text-decoration-none">Login here</a>
+          <a href="/login" class="text-decoration-none fw-medium">Login here</a>
         </p>
       </div>
     </div>

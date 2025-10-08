@@ -5,41 +5,19 @@
     <!-- Sidebar -->
     <%- include('../partials/products/sidebar') %>
 
-    <!-- Main Section -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4" id="mainContent">
-      <!-- Page Header -->
-      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4" id="mainContent">
+      <div class="d-flex flex-column flex-md-row align-items-start justify-content-between mb-4">
         <h1 class="fw-bold mb-3 mb-md-0">📦 Inventory</h1>
-
-        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
-          <!-- Add Product -->
-          <% if (currentUser && currentUser.role === "admin") { %>
-          <a href="/products/new" class="btn btn-success"> <i class="bi bi-plus-circle"></i> Add Product </a>
-          <% } %>
-
-          <!-- Search -->
-          <form action="/products" method="get" class="d-flex">
-            <% if (category) { %>
-            <input type="hidden" name="category" value="<%= category %>" />
-            <% } %>
-            <input
-              type="text"
-              class="form-control me-2"
-              name="q"
-              placeholder="Search products..."
-              value="<%= q || '' %>"
-            />
-            <button class="btn btn-outline-secondary">
-              <i class="bi bi-search"></i>
-            </button>
-          </form>
-        </div>
       </div>
 
-      <!-- Category Filter -->
-      <div class="mb-4">
+      <!-- Category + Search + Add -->
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 flex-wrap gap-3">
+        <!-- Category Filter (Left) -->
         <div class="d-flex flex-wrap gap-2">
-          <a href="/products" class="btn btn-sm <%= !category ? 'btn-primary' : 'btn-outline-primary' %>"> All </a>
+          <a href="/products" class="btn btn-sm <%= !category && !q ? 'btn-primary' : 'btn-outline-primary' %>">
+            All
+          </a>
           <% categories.forEach(cat => { %>
           <a
             href="/products?category=<%= cat %>"
@@ -49,9 +27,32 @@
           </a>
           <% }) %>
         </div>
+
+        <!-- Search + Add (Right) -->
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <form action="/products" method="get" class="d-flex" role="search">
+            <% if (category) { %>
+            <input type="hidden" name="category" value="<%= category %>" />
+            <% } %>
+            <input
+              type="text"
+              class="form-control me-2"
+              name="q"
+              placeholder="Search products..."
+              value="<%= q || '' %>"
+              style="min-width: 220px"
+            />
+            <button type="submit" class="btn btn-outline-secondary">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+
+          <% if (currentUser && currentUser.role === "admin") { %>
+          <a href="/products/new" class="btn btn-success"> <i class="bi bi-plus-circle me-1"></i> Add Product </a>
+          <% } %>
+        </div>
       </div>
 
-      <!-- Divider -->
       <hr class="my-3" />
 
       <!-- Inventory Table (Desktop) -->
@@ -76,32 +77,31 @@
               <% } else { %> <% db.forEach(data => { %>
               <tr>
                 <td class="fw-semibold"><%= data.name %></td>
-                <td class="text-center">
-                  <span class="badge bg-secondary"><%= data.category %></span>
-                </td>
+                <td class="text-center"><span class="badge bg-secondary"><%= data.category %></span></td>
                 <td class="text-end">₱<%= data.price %></td>
                 <td class="text-center">₱<%= data.marketPrice %></td>
                 <td class="text-center"><%= data.stock %></td>
                 <td class="text-center">
-                  <a href="/products/<%= data._id %>" class="btn btn-sm btn-primary me-1">
-                    <i class="bi bi-eye"></i>
-                  </a>
+                  <div class="d-flex justify-content-center gap-1">
+                    <a href="/products/<%= data._id %>" class="btn btn-sm btn-primary">
+                      <i class="bi bi-eye"></i>
+                    </a>
 
-                  <% if (currentUser && currentUser.role === "admin") { %>
-                  <a href="/products/<%= data._id %>/edit" class="btn btn-sm btn-success me-1">
-                    <i class="bi bi-pencil"></i>
-                  </a>
-
-                  <form action="/products/<%= data._id %>?_method=DELETE" method="POST" class="d-inline">
-                    <button
-                      type="submit"
-                      class="btn btn-sm btn-danger"
-                      onclick="return confirm('Delete this product?')"
+                    <% if (currentUser && currentUser.role === "admin") { %>
+                    <a href="/products/<%= data._id %>/edit" class="btn btn-sm btn-success">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <form
+                      action="/products/<%= data._id %>?_method=DELETE"
+                      method="POST"
+                      onsubmit="return confirm('Delete this product?')"
                     >
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
-                  <% } %>
+                      <button type="submit" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                    <% } %>
+                  </div>
                 </td>
               </tr>
               <% }) %> <% } %>
@@ -110,38 +110,44 @@
         </div>
       </div>
 
-      <!-- Inventory Cards (Mobile) -->
+      <!-- Mobile Cards -->
       <div class="d-md-none">
         <% if (db.length === 0) { %>
-        <p class="text-center text-muted">No products found</p>
+        <p class="text-center text-muted mt-4">No products found</p>
         <% } else { %>
         <div class="row g-3">
           <% db.forEach(data => { %>
           <div class="col-12">
             <div class="card shadow-sm border-0">
               <div class="card-body">
-                <h5 class="card-title fw-semibold mb-1"><%= data.name %></h5>
-                <p class="mb-1">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h5 class="card-title fw-semibold mb-0"><%= data.name %></h5>
                   <span class="badge bg-secondary"><%= data.category %></span>
-                </p>
+                </div>
                 <p class="mb-1">Price: <strong>₱<%= data.price %></strong></p>
-                <p class="mb-2">Stock: <%= data.stock %></p>
+                <p class="mb-1">Market Price: ₱<%= data.marketPrice %></p>
+                <p class="mb-3">Stock: <%= data.stock %></p>
+
                 <div class="d-flex gap-2">
                   <a href="/products/<%= data._id %>" class="btn btn-sm btn-primary flex-fill">
                     <i class="bi bi-eye"></i> View
                   </a>
+
+                  <% if (currentUser && currentUser.role === "admin") { %>
                   <a href="/products/<%= data._id %>/edit" class="btn btn-sm btn-success flex-fill">
                     <i class="bi bi-pencil"></i> Edit
                   </a>
-                  <form action="/products/<%= data._id %>?_method=DELETE" method="POST" class="flex-fill">
-                    <button
-                      type="submit"
-                      class="btn btn-sm btn-danger w-100"
-                      onclick="return confirm('Delete this product?')"
-                    >
+                  <form
+                    action="/products/<%= data._id %>?_method=DELETE"
+                    method="POST"
+                    class="flex-fill"
+                    onsubmit="return confirm('Delete this product?')"
+                  >
+                    <button type="submit" class="btn btn-sm btn-danger w-100">
                       <i class="bi bi-trash"></i> Delete
                     </button>
                   </form>
+                  <% } %>
                 </div>
               </div>
             </div>
