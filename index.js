@@ -29,8 +29,7 @@ const app = express();
 // All Static Files like .css and .js will be here
 app.use(express.static(path.join(__dirname, "public")));
 
-const mongo_env = process.env.MONGO_ATLAS;
-const mongo_url = "mongodb://127.0.0.1:27017/inventoryApp";
+const mongo_url = process.env.MONGO_ATLAS || "mongodb://127.0.0.1:27017/inventoryApp";
 
 main().catch((err) => console.log("Error Connection", err));
 async function main() {
@@ -118,6 +117,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error", { err });
 });
 
-app.listen("3000", () => {
-  console.log("Server Starting: localhost:3000");
+const port = process.env.PORT || 3000;
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Serving on port ${port}`);
 });
