@@ -24,7 +24,7 @@ const productSchema = new Schema({
   category: {
     type: String,
     lowercase: true,
-    enum: ["food", "beverages", "sauce", "snacks", "cigarettes"],
+    enum: ["food", "beverages", "sauce", "snacks", "cigarettes", "seasonings", "bisquits", "others"],
   },
   stock: {
     type: Number,

@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const categories = ["food", "beverages", "snacks", "sauce", "cigarettes"];
+const categories = ["food", "beverages", "sauce", "snacks", "cigarettes", "seasonings", "bisquits", "others"];
 
 module.exports.validationSchema = Joi.object({
   name: Joi.string().trim().min(2).max(100).required().messages({

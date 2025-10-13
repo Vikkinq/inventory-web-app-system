@@ -1,12 +1,12 @@
 const Product = require("../models/product");
 const ExpressError = require("../Utility/AppError");
 
-const categories = ["food", "beverages", "snacks", "sauce", "cigarettes"];
+const categories = ["food", "beverages", "sauce", "snacks", "cigarettes", "seasonings", "bisquits", "others"];
 
 module.exports.index = async (req, res, next) => {
   try {
     const page = parseInt(req.query.p) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 10;
     const { category, q } = req.query;
     let filter = {};
 

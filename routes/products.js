@@ -5,7 +5,7 @@ const { validateProduct } = require("../Utility/ValidationUtilities");
 const collection = require("../collections/product_collections");
 
 // INDEX (show all products)
-router.get("/", isLoggedIn, collection.index);
+router.get("/", collection.index);
 
 // NEW form — admin only
 router.get("/new", isLoggedIn, isAdmin, collection.new_form);

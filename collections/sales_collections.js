@@ -1,9 +1,43 @@
 const Product = require("../models/product");
 const Sale = require("../models/sales");
 
+const categories = ["food", "beverages", "sauce", "snacks", "cigarettes", "seasonings", "bisquits", "others"];
+
 module.exports.sales_tab = async (req, res, next) => {
-  const allProducts = await Product.find({});
-  res.render("sales/sales_tab", { allProducts });
+  try {
+    const page = parseInt(req.query.p) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+
+    let filter = {};
+    const { category, q } = req.query;
+
+    // Filter by category
+    if (category && categories.includes(category)) {
+      filter.category = category;
+    }
+
+    // Search filter
+    if (q && q.trim() !== "") {
+      filter.name = new RegExp(q, "i");
+    }
+
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    const allProducts = await Product.find(filter)
+      .skip((page - 1) * limit)
+      .limit(limit);
+    res.render("sales/sales_tab", {
+      allProducts,
+      categories,
+      category,
+      q,
+      currentPage: page,
+      totalPages,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports.sales = async (req, res) => {

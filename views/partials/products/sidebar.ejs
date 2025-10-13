@@ -17,18 +17,18 @@
         class="profile-pic bg-white text-dark rounded-circle d-flex align-items-center justify-content-center"
         style="width: 40px; height: 40px"
       >
-        <%= currentUser.username.charAt(0).toUpperCase() %>
+        <%= currentUser && currentUser.username ? currentUser.username.charAt(0).toUpperCase() : "G" %>
       </div>
       <div class="ms-2">
-        <h6 class="mb-0"><%= currentUser.username %></h6>
-        <small>Role: <%= currentUser.role %></small>
+        <h6 class="mb-0"><%= currentUser && currentUser.username ? currentUser.username : "Guest" %></h6>
+        <small> Role: <%= currentUser && currentUser.role ? currentUser.role : "Guest" %> </small>
       </div>
     </div>
 
     <!-- Core Pages -->
     <h6 class="text-white-50 text-uppercase">Core Pages</h6>
     <ul class="nav flex-column mb-3">
-      <% if (currentUser.role === "admin") { %>
+      <% if (currentUser && currentUser.role === "admin") { %>
       <li class="nav-item">
         <a class="nav-link" href="/dashboard"> <i class="fas fa-chart-line me-2"></i> Dashboard </a>
       </li>
@@ -49,17 +49,17 @@
     <!-- User Management -->
     <h6 class="text-white-50 text-uppercase">User / Account</h6>
     <ul class="nav flex-column mb-3">
-      <% if (currentUser.role === "admin") { %>
+      <% if (currentUser && currentUser.role === "admin") { %>
       <li class="nav-item">
         <a class="nav-link" href="/users"> <i class="fas fa-users me-2"></i> Users </a>
       </li>
       <% } %>
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" href="/profile"> <i class="fas fa-user-cog me-2"></i> Profile / Settings </a>
-      </li>
+      </li> -->
 
-      <% if(currentUser){ %>
+      <% if (currentUser) { %>
       <li class="nav-item">
         <a class="nav-link" href="/logout"> <i class="fas fa-sign-out-alt me-2"></i> Logout </a>
       </li>
@@ -71,9 +71,9 @@
     </ul>
 
     <!-- Dark Mode Toggle -->
-    <div class="form-check form-switch text-white mt-4">
+    <!-- <div class="form-check form-switch text-white mt-4">
       <input class="form-check-input" type="checkbox" id="darkModeToggle" />
-      <label class="form-check-label" for="darkModeToggle"> 🌙 Dark Mode </label>
-    </div>
+      <label class="form-check-label" for="darkModeToggle">🌙 Dark Mode</label>
+    </div> -->
   </div>
 </nav>
