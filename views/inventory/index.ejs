@@ -156,6 +156,44 @@
         </div>
         <% } %>
       </div>
+      <!-- Pagination Controls -->
+      <% if (totalPages > 1) { %>
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <!-- Prev Button -->
+          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a
+              class="page-link"
+              href="?p=<%= currentPage - 1 %><%= q ? '&q=' + q : '' %><%= category ? '&category=' + category : '' %>"
+            >
+              Previous
+            </a>
+          </li>
+
+          <!-- Page Numbers -->
+          <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+            <a
+              class="page-link"
+              href="?p=<%= i %><%= q ? '&q=' + q : '' %><%= category ? '&category=' + category : '' %>"
+            >
+              <%= i %>
+            </a>
+          </li>
+          <% } %>
+
+          <!-- Next Button -->
+          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+            <a
+              class="page-link"
+              href="?p=<%= currentPage + 1 %><%= q ? '&q=' + q : '' %><%= category ? '&category=' + category : '' %>"
+            >
+              Next
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <% } %>
     </main>
   </div>
 </div>

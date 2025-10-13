@@ -28,4 +28,5 @@ const salesSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Sale", salesSchema);
+const Sales = mongoose.model("Sale", salesSchema);
+module.exports = Sales;

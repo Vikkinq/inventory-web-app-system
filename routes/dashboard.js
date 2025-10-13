@@ -7,5 +7,6 @@ const Sale = require("../models/sales");
 const controller = require("../collections/dashboard_collection");
 
 router.get("/", isLoggedIn, isAdmin, controller.dashboard);
+router.get("/chart-data", controller.getChartData);
 
 module.exports = router;

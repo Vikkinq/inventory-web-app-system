@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const mongoose = require("mongoose");
 const Product = require("../models/product");
+const Sales = require("../models/sales");
 const items = require("./seeds");
 
 const mongo_url = process.env.MONGO_ATLAS || "mongodb://127.0.0.1:27017/inventoryApp";
@@ -28,4 +29,18 @@ const seedDB = async () => {
   }
 };
 
-seedDB();
+const deleteSales = async () => {
+  try {
+    await Sales.deleteMany({});
+
+    console.log(`Seeded ${items.length} Travel Spots`);
+  } catch (err) {
+    console.error(`Seed Error: `, err);
+  } finally {
+    await mongoose.disconnect();
+    console.log("DISCONNECTED!");
+  }
+};
+
+// seedDB();
+deleteSales();

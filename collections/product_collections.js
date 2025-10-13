@@ -5,30 +5,35 @@ const categories = ["food", "beverages", "snacks", "sauce", "cigarettes"];
 
 module.exports.index = async (req, res, next) => {
   try {
+    const page = parseInt(req.query.p) || 1;
+    const limit = parseInt(req.query.limit) || 20;
     const { category, q } = req.query;
     let filter = {};
 
-    // ✅ Filter by category
+    // Filter by category
     if (category && categories.includes(category)) {
       filter.category = category;
     }
 
-    // ✅ Optional search by product name
+    // Search filter
     if (q && q.trim() !== "") {
-      filter.name = new RegExp(q, "i"); // case-insensitive
+      filter.name = new RegExp(q, "i");
     }
 
-    const db = await Product.find(filter);
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
 
-    if (!db) {
-      throw new ExpressError("Cannot find data", 404);
-    }
+    const db = await Product.find(filter)
+      .skip((page - 1) * limit)
+      .limit(limit);
 
     res.render("inventory/index", {
       db,
       categories,
-      category, // for highlighting active category button
-      q, // so search box can keep its value
+      category,
+      q,
+      currentPage: page,
+      totalPages,
     });
   } catch (err) {
     next(err);
